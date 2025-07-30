@@ -318,7 +318,7 @@ Ao trabalhar em equipe ou em diferentes computadores, você pode encontrar erros
         ```bash
         git pull
         ```
-    2.  **gitsolva Conflitos (se houver):** Se você e o repositório remoto alteraram a mesma parte do mesmo arquivo, o Git pausará a mesclagem e entrará em um estado de conflito.
+    2.  **Resolva Conflitos (se houver):** Se você e o repositório remoto alteraram a mesma parte do mesmo arquivo, o Git pausará a mesclagem e entrará em um estado de conflito.
         -   Execute `git status` para ver quais arquivos estão em "Unmerged paths".
         -   Abra esses arquivos no VS Code. Você verá os conflitos marcados com `<<<<<<< HEAD`, `=======`, e `>>>>>>>`.
         -   O VS Code fornecerá botões para "Accept Current Change" (suas alterações), "Accept Incoming Change" (alterações remotas) ou "Accept Both Changes".
@@ -334,7 +334,7 @@ Ao trabalhar em equipe ou em diferentes computadores, você pode encontrar erros
 
     3.  **Envie novamente:** Agora que seu repositório está sincronizado, o push funcionará.
         ```bash
-        git push
+       git status
         ```
     > **Dica:** Se a mesclagem parecer muito complicada, você pode cancelá-la com segurança a qualquer momento (antes do `git commit`) usando o comando: `git merge --abort`.
 
@@ -425,7 +425,7 @@ Antes de fazer o deploy, precisamos garantir que o frontend saiba como encontrar
     -   **Root Directory:** `backend` (Isso é **muito importante** para a Render encontrar os arquivos corretos).
     -   **Runtime:** `Node`.
     -   **Build Command:** `npm install`
-    -   **Start Command:** `npx ts-node backend.ts`
+    -   **Start Command:** `npm start`
     -   **Instance Type:** `Free`.
 5.  **Adicione as Variáveis de Ambiente:**
     -   Clique em **Advanced**.
