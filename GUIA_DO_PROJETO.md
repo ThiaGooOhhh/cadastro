@@ -324,6 +324,16 @@ Ao trabalhar em equipe ou em diferentes computadores, você pode encontrar erros
         git remote add origin URL_DO_SEU_REPOSITORIO_NO_GITHUB
         ```
 
+    > **Dica Pro: Configurando o Rastreamento Automático**
+    >
+    > Para evitar ter que digitar `-u` toda vez que você envia um novo branch pela primeira vez, você pode configurar o Git para fazer isso automaticamente. O Git até sugere isso com a mensagem: `To have this happen automatically... see 'push.autoSetupRemote'`.
+    >
+    > Execute este comando uma única vez para configurar isso globalmente em sua máquina:
+    > ```bash
+    > git config --global push.autoSetupRemote true
+    > ```
+    > Depois disso, para qualquer novo branch, um simples `git push` na primeira vez será suficiente para criar o branch remoto e configurar o rastreamento.
+
 ## 5. Deploy (Hospedagem Pública) na Render
 
 Para que sua aplicação esteja acessível publicamente na internet, vamos hospedá-la na Render. O processo é dividido em duas partes: o deploy do **Backend** e o do **Frontend**.
