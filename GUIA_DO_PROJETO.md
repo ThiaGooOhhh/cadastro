@@ -261,6 +261,28 @@ Se preferir não usar a CLI do GitHub:
 
 ---
 
+#### 4.3.2. O Fluxo de Trabalho Padrão para Evitar Conflitos (Pull, Commit, Push)
+
+O "erro" de `rejected` (rejeitado) ao tentar fazer um `git push` não é um bug, mas uma medida de segurança do Git. Ele ocorre quando o repositório remoto (GitHub) tem commits que seu repositório local não possui.
+
+Para evitar isso e manter seu trabalho sincronizado, adote o seguinte fluxo como prática padrão:
+
+1.  **Sincronize ANTES de enviar (`pull`):** Antes de enviar suas alterações, sempre puxe as atualizações mais recentes do servidor. Isso garante que você está trabalhando na versão mais atual do código.
+    ```bash
+    git pull
+    ```
+
+2.  **Adicione e "Commite" suas alterações (`add` e `commit`):** Após fazer suas modificações, salve-as em um commit local.
+    ```bash
+    git add .
+    git commit -m "feat: Descrição da sua alteração"
+    ```
+
+3.  **Envie seu trabalho (`push`):** Agora que seu repositório local está atualizado com as mudanças remotas e também contém suas novas alterações, você pode enviá-lo com segurança.
+    ```bash
+    git push
+    ```
+
 #### **Cenário B: Enviando Atualizações para um Repositório Existente**
 
 Se o projeto já está no GitHub, o fluxo de trabalho diário é mais simples:
@@ -294,13 +316,27 @@ Ao trabalhar em equipe ou em diferentes computadores, você pode encontrar erros
 -   **Solução:**
     1.  **Puxe as alterações remotas:**
         ```bash
-        git pull origin main
+        git pull
         ```
-    2.  **Resolva Conflitos (se houver):** Se você e outra pessoa alteraram a mesma parte do mesmo arquivo, o Git pedirá para você resolver o conflito manualmente. Abra os arquivos indicados, edite-os para a versão final e depois execute `git add .` e `git commit`.
-    3.  **Envie novamente:**
+    2.  **gitsolva Conflitos (se houver):** Se você e o repositório remoto alteraram a mesma parte do mesmo arquivo, o Git pausará a mesclagem e entrará em um estado de conflito.
+        -   Execute `git status` para ver quais arquivos estão em "Unmerged paths".
+        -   Abra esses arquivos no VS Code. Você verá os conflitos marcados com `<<<<<<< HEAD`, `=======`, e `>>>>>>>`.
+        -   O VS Code fornecerá botões para "Accept Current Change" (suas alterações), "Accept Incoming Change" (alterações remotas) ou "Accept Both Changes".
+        -   Escolha a opção correta ou edite o código manualmente para combinar as duas versões.
+        -   Após resolver e salvar cada arquivo, adicione-os ao Git:
+            ```bash
+            git add .
+            ```
+        -   Finalize a mesclagem com um commit. O Git geralmente sugere uma mensagem padrão, que você pode aceitar:
+            ```bash
+            git commit
+            ```
+
+    3.  **Envie novamente:** Agora que seu repositório está sincronizado, o push funcionará.
         ```bash
         git push
         ```
+    > **Dica:** Se a mesclagem parecer muito complicada, você pode cancelá-la com segurança a qualquer momento (antes do `git commit`) usando o comando: `git merge --abort`.
 
 ##### **Erro: "refusing to merge unrelated histories"**
 
