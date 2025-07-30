@@ -370,52 +370,6 @@ Ao trabalhar em equipe ou em diferentes computadores, você pode encontrar erros
     > ```
     > Depois disso, para qualquer novo branch, um simples `git push` na primeira vez será suficiente para criar o branch remoto e configurar o rastreamento.
 
----
-
-### 4.4. Testando o Backend Manualmente (API)
-
-Para garantir que a API do backend está funcionando corretamente, você pode testá-la manualmente usando uma ferramenta de cliente HTTP. Isso permite que você envie requisições diretamente para suas rotas (endpoints) e veja as respostas, sem precisar da interface do frontend.
-
-**Ferramentas Recomendadas:**
--   **Thunder Client:** Uma extensão para o VS Code, muito leve e prática. **(Recomendado para começar)**.
--   **Postman:** Uma aplicação mais completa e poderosa, padrão na indústria.
-
-**Guia Rápido com Thunder Client (Extensão do VS Code):**
-
-1.  **Instale a Extensão:** Procure por "Thunder Client" na aba de extensões do VS Code e instale-a.
-2.  **Inicie o Backend:** Certifique-se de que seu servidor backend está rodando (`npx ts-node backend.ts` na pasta `backend`).
-3.  **Abra o Thunder Client:** Clique no ícone do Thunder Client na barra lateral do VS Code.
-
-**Exemplo 1: Testando a Rota para Buscar Clientes (`GET /api/clients`)**
-
-1.  Clique em **New Request**.
-2.  Na tela principal, configure a requisição:
-    -   **Método:** `GET`
-    -   **URL:** `http://localhost:3001/api/clients`
-3.  Clique em **Send**.
-4.  **Resultado Esperado:**
-    -   À direita, você verá a resposta do servidor.
-    -   **Status:** `200 OK`.
-    -   **Corpo (Body):** Um array JSON com a lista de seus clientes.
-
-**Exemplo 2: Testando a Rota para Criar um Novo Cliente (`POST /api/clients`)**
-
-1.  Clique em **New Request**.
-2.  Configure a requisição:
-    -   **Método:** `POST`
-    -   **URL:** `http://localhost:3001/api/clients`
-3.  Vá para a aba **Body** abaixo da URL.
-4.  Selecione a opção **JSON**.
-5.  No campo de texto, insira os dados do novo cliente em formato JSON.
-6.  Clique em **Send**.
-7.  **Resultado Esperado:**
-    -   **Status:** `201 Created`.
-    -   **Corpo (Body):** O objeto JSON do cliente que você acabou de criar, agora com um `id` e `created_at`.
-
-Usar essas ferramentas é uma forma excelente de depurar e verificar se cada parte da sua API (e a conexão com o banco) está se comportando como o esperado.
-
----
-
 ## 5. Deploy (Hospedagem Pública) na Render
 
 Para que sua aplicação esteja acessível publicamente na internet, vamos hospedá-la na Render. O processo é dividido em duas partes: o deploy do **Backend** e o do **Frontend**.
