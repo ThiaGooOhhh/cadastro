@@ -370,6 +370,39 @@ Ao trabalhar em equipe ou em diferentes computadores, você pode encontrar erros
     > ```
     > Depois disso, para qualquer novo branch, um simples `git push` na primeira vez será suficiente para criar o branch remoto e configurar o rastreamento.
 
+---
+
+### 4.4. Automatizando o Envio de Atualizações (Script)
+
+Para simplificar o processo de salvar e enviar suas alterações para o GitHub, foi criado um script automatizado.
+
+**O que o script faz?**
+1.  Verifica se você está autenticado com a CLI do GitHub (`gh`). Se não estiver, ele te guiará pelo processo de login.
+2.  Sincroniza seu repositório local com o remoto (`git pull`).
+3.  Adiciona todas as suas alterações (`git add .`).
+4.  Solicita que você digite uma mensagem de commit descritiva.
+5.  Envia suas alterações para o GitHub (`git push`).
+
+**Como usar?**
+Em vez de digitar todos os comandos do Git manualmente, basta executar no terminal, na raiz do projeto:
+
+```bash
+npm run push
+```
+
+> **Nota sobre PowerShell:** Na primeira vez que você executar este script no Windows, talvez seja necessário permitir a execução de scripts. Se encontrar um erro de política de execução, abra o PowerShell como **Administrador** e execute o comando: `Set-ExecutionPolicy RemoteSigned`. Isso só precisa ser feito uma vez.
+
+#### Erro: `O argumento './scripts/push-updates.ps1' para o parâmetro -File não existe`
+
+-   **Causa:** Este erro ocorre quando você executa `npm run push` de um diretório que não é a pasta raiz do projeto. O PowerShell não consegue encontrar o arquivo de script porque o caminho relativo (`./scripts/...`) está incorreto a partir da sua localização atual.
+
+-   **Solução:** Certifique-se sempre de executar o comando `npm run push` a partir do diretório principal do projeto, o mesmo que contém o `package.json` e a pasta `scripts`.
+    ```bash
+    # Exemplo: Navegue para a pasta correta antes de executar
+    cd D:\Aplicativos\CadastroII
+    npm run push
+    ```
+
 ## 5. Deploy (Hospedagem Pública) na Render
 
 Para que sua aplicação esteja acessível publicamente na internet, vamos hospedá-la na Render. O processo é dividido em duas partes: o deploy do **Backend** e o do **Frontend**.
