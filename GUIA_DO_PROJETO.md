@@ -370,39 +370,6 @@ Ao trabalhar em equipe ou em diferentes computadores, você pode encontrar erros
     > ```
     > Depois disso, para qualquer novo branch, um simples `git push` na primeira vez será suficiente para criar o branch remoto e configurar o rastreamento.
 
----
-
-### 4.4. Automatizando o Envio de Atualizações (Script)
-
-Para simplificar o processo de salvar e enviar suas alterações para o GitHub, foi criado um script automatizado.
-
-**O que o script faz?**
-1.  Verifica se você está autenticado com a CLI do GitHub (`gh`). Se não estiver, ele te guiará pelo processo de login.
-2.  Sincroniza seu repositório local com o remoto (`git pull`).
-3.  Adiciona todas as suas alterações (`git add .`).
-4.  Solicita que você digite uma mensagem de commit descritiva.
-5.  Envia suas alterações para o GitHub (`git push`).
-
-**Como usar?**
-Em vez de digitar todos os comandos do Git manualmente, basta executar no terminal, na raiz do projeto:
-
-```bash
-npm run push
-```
-
-> **Nota sobre PowerShell:** Na primeira vez que você executar este script no Windows, talvez seja necessário permitir a execução de scripts. Se encontrar um erro de política de execução, abra o PowerShell como **Administrador** e execute o comando: `Set-ExecutionPolicy RemoteSigned`. Isso só precisa ser feito uma vez.
-
-#### Erro: `O argumento './scripts/push-updates.ps1' para o parâmetro -File não existe`
-
--   **Causa:** Este erro ocorre quando você executa `npm run push` de um diretório que não é a pasta raiz do projeto. O PowerShell não consegue encontrar o arquivo de script porque o caminho relativo (`./scripts/...`) está incorreto a partir da sua localização atual.
-
--   **Solução:** Certifique-se sempre de executar o comando `npm run push` a partir do diretório principal do projeto, o mesmo que contém o `package.json` e a pasta `scripts`.
-    ```bash
-    # Exemplo: Navegue para a pasta correta antes de executar
-    cd D:\Aplicativos\CadastroII
-    npm run push
-    ```
-
 ## 5. Deploy (Hospedagem Pública) na Render
 
 Para que sua aplicação esteja acessível publicamente na internet, vamos hospedá-la na Render. O processo é dividido em duas partes: o deploy do **Backend** e o do **Frontend**.
@@ -505,6 +472,19 @@ Aguarde o build e o deploy. Em poucos minutos, sua aplicação estará no ar em 
     4.  Verifique se o **Start Command** está definido como `npm start`.
 
     Isso fará com que a Render mude para o diretório `backend` *antes* de executar os comandos, e tudo funcionará como esperado.
+
+#### Erro: `connect ENETUNREACH ...` no deploy do Backend
+
+-   **Sintoma:** O deploy do backend falha com um erro `connect ENETUNREACH` seguido por um endereço IPv6.
+
+-   **Causa Raiz:** O ambiente de rede da Render, assim como algumas redes locais, pode ter problemas ao tentar se conectar a serviços externos (como o Supabase) usando IPv6.
+
+-   **Solução:** Forçar o Node.js a preferir conexões IPv4. Verifique se o seu arquivo `backend/backend.ts` contém as seguintes linhas no topo. Se não, adicione-as, faça o commit e envie para o GitHub para acionar um novo deploy.
+    ```typescript
+    import dns from 'dns';
+    dns.setDefaultResultOrder('ipv4first');
+    ```
+    Esta é a mesma solução aplicada para o problema em ambiente de desenvolvimento local.
 
 ---
 
