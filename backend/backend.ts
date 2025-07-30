@@ -1,10 +1,18 @@
 /// <reference types="node" />
 
+import dns from 'dns';
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import 'dotenv/config';
 import pg from 'pg';
+
+// --- Forçar resolução de DNS para IPv4 ---
+// Em algumas redes (incluindo ambientes de nuvem como a Render), a resolução de
+// nomes de domínio (DNS) pode priorizar endereços IPv6 que não são corretamente
+// roteáveis, causando o erro "ENETUNREACH" (Rede Inacessível). A linha abaixo
+// instrui o Node.js a preferir endereços IPv4, resolvendo o problema de conexão.
+dns.setDefaultResultOrder('ipv4first');
 
 // --- Types ---
 interface Address {
