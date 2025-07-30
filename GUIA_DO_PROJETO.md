@@ -234,13 +234,20 @@ Para salvar seu progresso e colaborar, é essencial usar o Git.
         ```
         (Para outros sistemas, consulte a documentação oficial).
 
-    2.  **Autentique-se:** Conecte a CLI à sua conta do GitHub.
+    2.  **Verifique a Autenticação:** Antes de tentar fazer login, verifique se você já está conectado à sua conta do GitHub:
+        ```bash
+        gh auth status
+        ```
+        -   Se o comando mostrar que você **já está logado** na conta correta, você pode pular o próximo passo e ir direto para a criação do repositório.
+        -   Se o comando retornar um erro ou indicar que você **não está logado**, prossiga para o passo de autenticação.
+
+    3.  **Autentique-se (se necessário):** Conecte a CLI à sua conta do GitHub.
         ```bash
         gh auth login
         ```
-        Siga as instruções, escolhendo "HTTPS" e "Login with a web browser".
+        Siga as instruções que aparecerão no terminal. O método mais simples é escolher "HTTPS" como protocolo e "Login with a web browser" para autenticar no navegador.
 
-    3.  **Crie e envie o repositório:** Na pasta raiz do seu projeto, execute:
+    4.  **Crie e envie o repositório:** Na pasta raiz do seu projeto, execute:
         ```bash
         gh repo create
         ```
@@ -251,6 +258,41 @@ Para salvar seu progresso e colaborar, é essencial usar o Git.
         ```bash
         git push
         ```
+
+    #### 4.3.1. Resolvendo Erros Comuns: "non-fast-forward"
+
+    Se ao tentar dar `git push` você receber um erro como `! [rejected] main -> main (non-fast-forward)`, isso significa que o repositório remoto no GitHub tem commits (alterações) que você ainda não tem no seu computador. O Git está te protegendo para que você não sobrescreva o trabalho de outra pessoa (ou seu próprio trabalho de outra máquina).
+
+    **Como resolver:**
+
+    1.  **Puxe as alterações remotas:** Antes de enviar as suas, você precisa baixar e mesclar as alterações do GitHub.
+        ```bash
+        git pull origin main
+        ```
+
+    2.  **Resolva Conflitos (se houver):**
+        -   Se o Git não conseguir mesclar as alterações automaticamente, ele irá pausar e te informar quais arquivos têm conflitos.
+        -   Abra esses arquivos no seu editor (o VS Code mostra as áreas de conflito claramente).
+        -   Edite os arquivos para manter as alterações que você quer, removendo as marcações de conflito (`<<<<<<<`, `=======`, `>>>>>>>`).
+        -   Após resolver, salve os arquivos e adicione-os ao Git: `git add .`
+        -   Crie um novo commit para a mesclagem: `git commit -m "Merge: Incorpora alterações remotas"`
+
+    3.  **Envie novamente:** Agora que seu histórico local contém as alterações remotas, você pode enviar as suas.
+        ```bash
+        git push
+        ```
+
+    #### 4.3.2. Resolvendo Erros Comuns: "No remote for the current branch"
+
+    Se ao tentar dar `git pull` ou `git push` você receber um erro como `fatal: No remote for the current branch.`, isso significa que seu branch local (ex: `main`) não sabe qual branch no GitHub ele deve acompanhar (rastrear).
+
+    **Como resolver:**
+
+    1.  **Defina o branch de rastreamento (upstream):** Execute o comando `push` com o sinalizador `-u` ou `--set-upstream`. Isso só precisa ser feito uma vez por branch.
+        ```bash
+        git push -u origin main
+        ```
+    2.  Após isso, os comandos `git push` e `git pull` funcionarão sem argumentos adicionais.
 
 ---
 
