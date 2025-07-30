@@ -170,150 +170,159 @@ Para executar o projeto completo, você precisará rodar o Backend e o Frontend 
 
 ### 4.3. Controle de Versão com Git e GitHub
 
-Para salvar seu progresso e colaborar, é essencial usar o Git.
+Para salvar seu progresso e colaborar, é essencial usar o Git. Esta seção está dividida em dois cenários principais:
 
-1.  **Inicialize o Git no seu Projeto (se for a primeira vez):**
-    -   Abra o terminal na pasta raiz do seu projeto (a que contém o `index.html` e a pasta `backend`).
-    -   Execute o comando:
-        ```bash
-        git init
-        ```
+-   **Cenário A:** Você está configurando o projeto pela primeira vez e precisa enviá-lo para um novo repositório no GitHub.
+-   **Cenário B:** O projeto já existe no GitHub e você só precisa enviar suas atualizações.
 
-2.  **Crie um `.gitignore`:**
-    -   Na mesma pasta raiz, crie um arquivo chamado `.gitignore`. Este arquivo diz ao Git quais pastas e arquivos ignorar.
-    -   É **crucial** que ele contenha o seguinte para não enviar suas chaves secretas (`.env`) e dependências (`node_modules`) para o repositório:
+---
 
-        ```gitignore
-        # Dependências do Node.js
-        /backend/node_modules
-        node_modules/
+#### **Cenário A: Configuração Inicial e Primeiro Envio para o GitHub**
 
-        # Arquivos de ambiente com segredos
-        .env
-        /backend/.env
+Siga estes passos se você ainda **não** tem um repositório para este projeto no GitHub.
 
-        # Logs e arquivos de build
-        npm-debug.log
-        /dist
-        ```
+**1. Preparação Local (Primeiro Commit)**
 
-3.  **Adicione e "Commite" seus Arquivos:**
-    -   No terminal, adicione todos os arquivos do seu projeto ao controle do Git:
-        ```bash
-        git add .
-        ```
-    -   Agora, crie um "commit", que é um registro das suas alterações:
-        ```bash
-        git commit -m "feat: Commit inicial do projeto"
-        ```
+Se você ainda não inicializou o Git no seu projeto, faça isso agora.
 
-4.  **Conectando e Enviando para o GitHub (Primeira Vez)**
-    Existem duas maneiras de criar e conectar seu repositório no GitHub. O método com a CLI é mais rápido e moderno.
+-   **Inicialize o Git:** Na pasta raiz do projeto, execute:
+    ```bash
+    git init
+    ```
 
-    #### Método 1: Manual (via site do GitHub)
-    -   Vá até o site do [GitHub](https://github.com) e crie um novo repositório (sem inicializá-lo com arquivos).
-    -   Copie a URL do seu repositório.
-    -   No seu terminal, execute os comandos que o próprio GitHub sugere:
-        ```bash
-        # Conecta seu repositório local ao remoto
-        git remote add origin https://github.com/SEU-USUARIO/SEU-REPOSITORIO.git
+-   **Crie o `.gitignore`:** Na mesma pasta, crie um arquivo chamado `.gitignore`. É **crucial** que ele contenha o seguinte para não enviar suas chaves secretas (`.env`) e dependências (`node_modules`):
+    ```gitignore
+    # Dependências do Node.js
+    /backend/node_modules
+    node_modules/
 
-        # Renomeia a branch principal para "main" (boa prática)
-        git branch -M main
+    # Arquivos de ambiente com segredos
+    .env
+    /backend/.env
 
-        # Envia seus arquivos para o GitHub
-        git push -u origin main
-        ```
+    # Logs e arquivos de build
+    npm-debug.log
+    /dist
+    ```
 
-    #### Método 2: GitHub CLI (Recomendado)
-    A ferramenta de linha de comando oficial do GitHub (`gh`) simplifica muito este processo.
+-   **Adicione e "Commite" seus Arquivos:**
+    ```bash
+    git add .
+    git commit -m "feat: Commit inicial do projeto"
+    ```
 
-    1.  **Instale o GitHub CLI:** Se ainda não tiver, instale-o. No Windows, via PowerShell:
-        ```powershell
-        winget install --id GitHub.cli
-        ```
-        (Para outros sistemas, consulte a documentação oficial).
+**2. Criando e Enviando para o Repositório no GitHub**
 
-    2.  **Verifique a Autenticação:** Antes de tentar fazer login, verifique se você já está conectado à sua conta do GitHub:
-        ```bash
-        gh auth status
-        ```
-        -   Se o comando mostrar que você **já está logado** na conta correta, você pode pular o próximo passo e ir direto para a criação do repositório.
-        -   Se o comando retornar um erro ou indicar que você **não está logado**, prossiga para o passo de autenticação.
+Agora, vamos criar o repositório no GitHub e enviar seu código. O método com a CLI (linha de comando) é o mais recomendado.
 
-    3.  **Autentique-se (se necessário):** Conecte a CLI à sua conta do GitHub.
-        ```bash
-        gh auth login
-        ```
-        Siga as instruções que aparecerão no terminal. O método mais simples é escolher "HTTPS" como protocolo e "Login with a web browser" para autenticar no navegador.
+##### **Método Recomendado: Usando a GitHub CLI (`gh`)**
 
-    4.  **Crie e envie o repositório:** Na pasta raiz do seu projeto, execute:
-        ```bash
-        gh repo create
-        ```
-        O assistente interativo irá guiá-lo. Ele criará o repositório no GitHub, adicionará o `remote` e fará o `push` dos seus commits iniciais automaticamente.
+A ferramenta de linha de comando oficial do GitHub (`gh`) automatiza e simplifica o processo.
 
-5.  **Envie Atualizações Futuras:**
-    -   Após fazer novas alterações e "commitar" (passo 3), envie-as para o GitHub com:
-        ```bash
-        git push
-        ```
+-   **Passo 1: Verifique sua Autenticação**
+    Primeiro, verifique se você já está conectado à sua conta do GitHub:
+    ```bash
+    gh auth status
+    ```
+    -   Se o comando mostrar que você **já está logado**, pule para o Passo 3.
+    -   Se retornar um erro ou indicar que você não está logado, vá para o Passo 2.
 
-    #### 4.3.1. Resolvendo Erros Comuns: "non-fast-forward"
+-   **Passo 2: Autentique-se (se necessário)**
+    Conecte a CLI à sua conta do GitHub. Você só precisa fazer isso uma vez por máquina.
+    ```bash
+    gh auth login
+    ```
+    Siga as instruções, escolhendo "HTTPS" e "Login with a web browser".
 
-    Se ao tentar dar `git push` você receber um erro como `! [rejected] main -> main (non-fast-forward)`, isso significa que o repositório remoto no GitHub tem commits (alterações) que você ainda não tem no seu computador. O Git está te protegendo para que você não sobrescreva o trabalho de outra pessoa (ou seu próprio trabalho de outra máquina).
+-   **Passo 3: Crie o Repositório e Envie o Código**
+    Este comando vai criar o repositório no GitHub, conectar seu projeto local a ele e enviar seus commits.
+    ```bash
+    gh repo create
+    ```
+    O assistente interativo irá guiá-lo. Responda às perguntas para configurar o nome e a visibilidade do repositório. Ao final, seu código estará no GitHub.
 
-    **Como resolver:**
+##### **Método Alternativo: Manual (via site do GitHub)**
 
-    1.  **Puxe as alterações remotas:** Antes de enviar as suas, você precisa baixar e mesclar as alterações do GitHub.
+Se preferir não usar a CLI do GitHub:
+
+1.  Vá até o site do GitHub e crie um novo repositório (sem inicializá-lo com arquivos `README` ou `.gitignore`).
+2.  Copie a URL do seu repositório (ex: `https://github.com/SEU-USUARIO/SEU-REPOSITORIO.git`).
+3.  No seu terminal, execute os seguintes comandos:
+    ```bash
+    # Conecta seu repositório local ao remoto
+    git remote add origin URL_DO_SEU_REPOSITORIO
+
+    # Renomeia a branch principal para "main" (boa prática)
+    git branch -M main
+
+    # Envia seus arquivos para o GitHub e configura o rastreamento
+    git push -u origin main
+    ```
+
+---
+
+#### **Cenário B: Enviando Atualizações para um Repositório Existente**
+
+Se o projeto já está no GitHub, o fluxo de trabalho diário é mais simples:
+
+**1. Faça suas alterações no código.**
+
+**2. Adicione e "Commite" as alterações:**
+   - Adicione todos os arquivos modificados:
+     ```bash
+     git add .
+     ```
+   - Crie um "commit" com uma mensagem descritiva:
+     ```bash
+     git commit -m "feat: Adiciona funcionalidade de busca de clientes"
+     ```
+
+**3. Envie as alterações para o GitHub:**
+   ```bash
+   git push
+   ```
+
+---
+
+#### 4.3.1. Resolvendo Problemas Comuns de Sincronização
+
+Ao trabalhar em equipe ou em diferentes computadores, você pode encontrar erros ao tentar usar `git push` ou `git pull`.
+
+##### **Erro: "non-fast-forward"**
+
+-   **O que significa:** O repositório remoto no GitHub tem alterações que você ainda não tem localmente. O Git impede o `push` para não sobrescrever o trabalho de outros.
+-   **Solução:**
+    1.  **Puxe as alterações remotas:**
         ```bash
         git pull origin main
         ```
-
-    2.  **Resolva Conflitos (se houver):**
-        -   Se o Git não conseguir mesclar as alterações automaticamente, ele irá pausar e te informar quais arquivos têm conflitos.
-        -   Abra esses arquivos no seu editor (o VS Code mostra as áreas de conflito claramente).
-        -   Edite os arquivos para manter as alterações que você quer, removendo as marcações de conflito (`<<<<<<<`, `=======`, `>>>>>>>`).
-        -   Após resolver, salve os arquivos e adicione-os ao Git: `git add .`
-        -   Crie um novo commit para a mesclagem: `git commit -m "Merge: Incorpora alterações remotas"`
-
-    3.  **Envie novamente:** Agora que seu histórico local contém as alterações remotas, você pode enviar as suas.
+    2.  **Resolva Conflitos (se houver):** Se você e outra pessoa alteraram a mesma parte do mesmo arquivo, o Git pedirá para você resolver o conflito manualmente. Abra os arquivos indicados, edite-os para a versão final e depois execute `git add .` e `git commit`.
+    3.  **Envie novamente:**
         ```bash
         git push
         ```
 
-    #### 4.3.2. Resolvendo Erros Comuns: "No remote for the current branch"
+##### **Erro: "refusing to merge unrelated histories"**
 
-    Se ao tentar dar `git pull` ou `git push` você receber um erro como `fatal: No remote for the current branch.`, isso significa que seu branch local (ex: `main`) não sabe qual branch no GitHub ele deve acompanhar (rastrear).
+-   **O que significa:** Acontece na primeira vez que você tenta dar `git pull` de um repositório que já tinha um commit inicial (ex: um `README.md` criado pelo GitHub). Seus commits locais e os remotos não têm um histórico em comum.
+-   **Solução:**
+    ```bash
+    git pull origin main --allow-unrelated-histories
+    ```
+    Após isso, resolva possíveis conflitos e envie suas alterações com `git push`.
 
-    **Como resolver:**
+##### **Erro: "No remote for the current branch" ou "fatal: ... does not appear to be a git repository"**
 
-    1.  **Defina o branch de rastreamento (upstream):** Execute o comando `push` com o sinalizador `-u` ou `--set-upstream`. Isso só precisa ser feito uma vez por branch.
+-   **O que significa:** Seu branch local (ex: `main`) não sabe para qual branch no GitHub ele deve enviar as alterações (não há um "upstream" configurado).
+-   **Solução:**
+    -   **Para configurar o rastreamento (faça isso uma vez por branch):**
         ```bash
         git push -u origin main
         ```
-    2.  Após isso, os comandos `git push` e `git pull` funcionarão sem argumentos adicionais.
-
----
-   #### 4.3.3. Resolvendo Erros Comuns: "refusing to merge unrelated histories"
-
-   Este erro pode acontecer na primeira vez que você tenta dar `git pull` de um repositório que já foi inicializado no GitHub (por exemplo, com um arquivo `README.md`).
-
-   -   **Erro:** `fatal: refusing to merge unrelated histories`
-   -   **Causa:** Seu histórico de commits local e o histórico do repositório remoto não têm um ponto em comum. Eles começaram como dois projetos separados.
-   -   **Solução:** Você precisa permitir que o Git mescle essas duas linhas do tempo.
-
-       1.  **Execute o pull com a flag `--allow-unrelated-histories`:**
-           ```bash
-           git pull origin main --allow-unrelated-histories
-           ```
-       2.  **Resolva Conflitos (se houver):** Se houver arquivos com o mesmo nome nos dois lugares (como um `.gitignore`), o Git pode pedir para você resolver os conflitos manualmente, como descrito na seção "non-fast-forward".
-       3.  **Envie suas alterações:** Após a mesclagem, você pode enviar seu trabalho.
-           ```bash
-           git push origin main
-           ```
-
----
+    -   **Se o `remote` não existir (verifique com `git remote -v`):**
+        ```bash
+        git remote add origin URL_DO_SEU_REPOSITORIO_NO_GITHUB
+        ```
 
 ## 5. Deploy (Hospedagem Pública) na Render
 
@@ -392,7 +401,7 @@ Aguarde o build e o deploy. Quando estiver pronto, a Render fornecerá uma URL p
     -   **Name:** Dê um nome único para sua aplicação (ex: `app-cadastro-clientes`).
     -   **Branch:** `main`.
     -   **Root Directory:** (Deixe em branco, pois o `package.json` está na raiz).
-    -   **Build Command:** `npm run build`
+    -   **Build Command:** `npm install && npm run build`
     -   **Publish Directory:** `dist` (Este é o diretório de saída do Vite).
 5.  **Adicione a Variável de Ambiente (para o build):**
     -   Clique em **Advanced**.
