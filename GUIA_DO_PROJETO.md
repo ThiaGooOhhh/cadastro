@@ -295,6 +295,25 @@ Para salvar seu progresso e colaborar, é essencial usar o Git.
     2.  Após isso, os comandos `git push` e `git pull` funcionarão sem argumentos adicionais.
 
 ---
+   #### 4.3.3. Resolvendo Erros Comuns: "refusing to merge unrelated histories"
+
+   Este erro pode acontecer na primeira vez que você tenta dar `git pull` de um repositório que já foi inicializado no GitHub (por exemplo, com um arquivo `README.md`).
+
+   -   **Erro:** `fatal: refusing to merge unrelated histories`
+   -   **Causa:** Seu histórico de commits local e o histórico do repositório remoto não têm um ponto em comum. Eles começaram como dois projetos separados.
+   -   **Solução:** Você precisa permitir que o Git mescle essas duas linhas do tempo.
+
+       1.  **Execute o pull com a flag `--allow-unrelated-histories`:**
+           ```bash
+           git pull origin main --allow-unrelated-histories
+           ```
+       2.  **Resolva Conflitos (se houver):** Se houver arquivos com o mesmo nome nos dois lugares (como um `.gitignore`), o Git pode pedir para você resolver os conflitos manualmente, como descrito na seção "non-fast-forward".
+       3.  **Envie suas alterações:** Após a mesclagem, você pode enviar seu trabalho.
+           ```bash
+           git push origin main
+           ```
+
+---
 
 ## 5. Deploy (Hospedagem Pública) na Render
 
