@@ -693,7 +693,11 @@ const ClientForm: React.FC<{client: Client | null, onSave: () => void, onCancel:
                 body: JSON.stringify(formData),
             });
 
-            if (!response.ok) throw new Error(`Falha na API: ${response.statusText}`);
+            if (!response.ok) {
+                // Tenta extrair uma mensagem de erro mais detalhada do corpo da resposta
+                const errorData = await response.json().catch(() => ({ error: `Falha na API: ${response.statusText}` }));
+                throw new Error(errorData.error || `Falha na API: ${response.statusText}`);
+            }
             
             const savedClient = await response.json();
             onLog('API', `${method} ${endpoint.replace(API_BASE_URL, '')} - Sucesso`, savedClient);

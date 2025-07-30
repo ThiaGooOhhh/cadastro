@@ -77,6 +77,24 @@ const handleError = (res: Response, error: any, message = "Ocorreu um erro inter
   res.status(500).json({ message, error: errorDetails });
 };
 
+// --- Sanitização de Dados ---
+const sanitizeClientPayload = (payload: Partial<Omit<Client, 'id'>>) => {
+    const sanitized = { ...payload };
+
+    // Converte strings vazias para null para campos que podem ser nulos.
+    // Isso garante que o banco de dados armazene 'NULL' em vez de uma string vazia.
+    if (sanitized.phone === '') sanitized.phone = null;
+    if (sanitized.email === '') sanitized.email = null;
+    if (sanitized.cpf === '') sanitized.cpf = null;
+
+    // Se o endereço for fornecido, mas todos os seus campos estiverem vazios, defina-o como nulo.
+    if (sanitized.address && Object.values(sanitized.address).every(v => v === '')) {
+        sanitized.address = null;
+    }
+    
+    return sanitized;
+};
+
 // --- Rotas da API (Clientes, Visitas, IA) ---
 
 // CLIENTES
@@ -96,9 +114,10 @@ app.get('/api/clients', async (req: Request, res: Response) => {
 type CreateClientPayload = Omit<Client, 'id'>;
 app.post('/api/clients', async (req: Request<{}, any, CreateClientPayload>, res: Response) => {
   try {
+    const sanitizedPayload = sanitizeClientPayload(req.body);
     const { data, error } = await supabase
       .from('clients')
-      .insert([req.body])
+      .insert([sanitizedPayload])
       .select();
     if (error) throw error;
     res.status(201).json(data[0]);
@@ -111,9 +130,10 @@ type UpdateClientPayload = Partial<Omit<Client, 'id'>>;
 app.put('/api/clients/:id', async (req: Request<{ id: string }, any, UpdateClientPayload>, res: Response) => {
     try {
         const { id } = req.params;
+        const sanitizedPayload = sanitizeClientPayload(req.body);
         const { data, error } = await supabase
           .from('clients')
-          .update(req.body)
+          .update(sanitizedPayload)
           .eq('id', id).select();
         if (error) throw error;
         if (!data || data.length === 0) return res.status(404).json({ message: "Cliente não encontrado." });
@@ -172,7 +192,7 @@ app.post('/api/visits', async (req: Request<{}, any, CreateVisitPayload>, res: R
 });
 
 // O clientName não é mais necessário no payload.
-type UpdateVisitPayload = Omit<Visit, 'id'>;
+type UpdateVisitPayload = Partial<Omit<Visit, 'id'>>;
 app.put('/api/visits/:id', async (req: Request<{ id: string }, any, UpdateVisitPayload>, res: Response) => {
     try {
         const { id } = req.params;

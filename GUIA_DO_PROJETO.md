@@ -458,6 +458,21 @@ Aguarde o build e o deploy. Quando estiver pronto, a Render fornecerá uma URL p
 
 Aguarde o build e o deploy. Em poucos minutos, sua aplicação estará no ar em uma URL pública fornecida pela Render!
 
+### 5.4. Resolvendo Problemas Comuns de Deploy
+
+#### Erro: `Error: Cannot find module './backend.ts'` no deploy do Backend
+
+-   **Causa:** Este erro acontece quando a Render executa o comando de inicialização (Start Command) a partir do diretório raiz do projeto, mas o arquivo `backend.ts` está dentro da pasta `backend`.
+
+-   **Solução:** A configuração mais importante para o deploy do backend é o **Root Directory**.
+
+    1.  Vá para o seu serviço de backend na Render.
+    2.  Vá em **Settings**.
+    3.  Verifique se o campo **Root Directory** está preenchido com `backend`.
+    4.  Verifique se o **Start Command** está definido como `npm start`.
+
+    Isso fará com que a Render mude para o diretório `backend` *antes* de executar os comandos, e tudo funcionará como esperado.
+
 ---
 
 ## 6. Próximos Passos e Melhorias Futuras
