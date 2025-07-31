@@ -1,6 +1,8 @@
 /// <reference types="node" />
 
 import dns from 'dns';
+import { URL } from 'url';
+import { promisify } from 'util';
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
@@ -227,7 +229,30 @@ app.delete('/api/visits/:id', async (req: Request<{ id: string }>, res: Response
 // --- Inicialização do Banco de Dados ---
 const initializeDatabase = async () => {
     const { Pool } = pg;
-    const pool = new Pool({ connectionString: dbConnectionString });
+
+    // --- Forçar resolução de DNS para IPv4 na conexão com o banco ---
+    // Analisa a string de conexão para extrair as partes.
+    const dbUrl = new URL(dbConnectionString!);
+    
+    // Converte a função de callback dns.lookup em uma que retorna Promise.
+    const lookup = promisify(dns.lookup);
+    
+    // Força a busca pelo endereço IPv4 do host do banco de dados.
+    const { address: dbIpAddress } = await lookup(dbUrl.hostname, { family: 4 });
+    console.log(`Host do banco de dados '${dbUrl.hostname}' resolvido para o endereço IPv4: ${dbIpAddress}`);
+
+    // Cria o pool de conexões usando o IP resolvido em vez do hostname.
+    const pool = new Pool({
+        user: dbUrl.username,
+        password: dbUrl.password,
+        host: dbIpAddress, // Usa o IP em vez do hostname
+        port: parseInt(dbUrl.port, 10),
+        database: dbUrl.pathname.slice(1),
+        // Supabase requer SSL. Como estamos nos conectando via IP, a verificação do nome do host no certificado pode falhar.
+        // A conexão ainda é criptografada, mas desabilitamos a verificação do certificado.
+        ssl: { rejectUnauthorized: false },
+    });
+
     const client = await pool.connect();
     try {
         console.log("Verificando schema do banco de dados...");
@@ -314,7 +339,7 @@ const startServer = async () => {
             console.log(`Backend server running on http://localhost:${port}`);
         });
     } catch (error) {
-        console.error("FALHA CRÍTICA: Não foi possível conectar ao banco de dados. Verifique a rede e as credenciais. O servidor será encerrado.", error);
+        console.error("FALHA GRAVE (v2): A conexão com o banco de dados falhou mesmo após forçar IPv4. Verifique as credenciais e a conectividade da rede da Render.", error);
         process.exit(1);
     }
 };
