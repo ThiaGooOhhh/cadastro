@@ -314,7 +314,7 @@ const startServer = async () => {
             console.log(`Backend server running on http://localhost:${port}`);
         });
     } catch (error) {
-        console.error("Falha ao inicializar o banco de dados. O servidor não será iniciado.", error);
+        console.error("FALHA CRÍTICA: Não foi possível conectar ao banco de dados. Verifique a rede e as credenciais. O servidor será encerrado.", error);
         process.exit(1);
     }
 };
